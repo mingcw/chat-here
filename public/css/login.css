@@ -1,0 +1,43 @@
+.main{
+    margin-top: 68px;
+}
+.card-login .logo{
+    padding-top: 20px;
+    text-align: center;
+    font-size: 120px;
+    color: #ccc;
+}
+.card-body .input-group-addon{
+    padding-left: 0;
+}
+.card-body .settings{
+    padding-left: 13px;
+}
+.settings-avatar li{
+    padding-left: 6px;
+    padding-bottom: 6px;
+}
+.settings-avatar img{
+    opacity: .8;
+    filter: alpha(opacity=80);
+}
+.settings-avatar img{
+    -webkit-transition: all .35s ease-in-out;
+       -moz-transition: all .35s ease-in-out;
+        -ms-transition: all .35s ease-in-out;
+         -o-transition: all .35s ease-in-out;
+            transition: all .35s ease-in-out;
+}
+.settings-avatar li.active img{
+
+    -webkit-box-shadow: 0px 0px 3px 5px #fd2964;
+       -moz-box-shadow: 0px 0px 3px 5px #fd2964;
+         -o-box-shadow: 0px 0px 3px 5px #fd2964;
+            box-shadow: 0px 0px 3px 5px #fd2964;
+     -webkit-transform: scale(1.2);
+        -moz-transform: scale(1.2);
+         -ms-transform: scale(1.2);
+          -o-transform: scale(1.2);
+             transform: scale(1.2);
+}
+

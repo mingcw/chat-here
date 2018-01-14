@@ -1,0 +1,30 @@
+body{
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif, "Microsoft Yahei";
+    font-size: 15px;
+    background: #FC5C7D;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #6A82FB, #FC5C7D);  /* Chrome 10-35, Safari 5.1-6 */
+    background: linear-gradient(to left, #6A82FB, #FC5C7D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+li{
+    list-style: none;
+}
+.btn .material-icons{
+    font-size: 22px;   
+}
+.text-white {
+    color: white;
+}
+.main{
+    background: none;
+}
+.modal-title{
+    font-weight: 400;
+}
+.modal-chat .modal-dialog{
+    margin-top: 60px;
+}
+@media screen and (max-width: 768px) {
+    .modal-chat .modal-dialog{
+        margin-top: 100px;
+    }
+}

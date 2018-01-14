@@ -1,0 +1,80 @@
+body{
+    padding-top:34px;
+}
+@media screen and (max-width: 768px) {
+    body{
+        padding-top: 0;
+    }
+}
+.profile{
+    padding: 0;
+    color: #fff;
+}
+.profile li{
+    padding: 10px 0;
+}
+.user-info img{
+    width: 48px;
+    height: auto;
+    float: left;
+}
+.user-info span{
+    clear: both;
+    padding-left: 13px;
+}
+.user-info a{
+    color: #fff;
+    text-decoration: underline;
+}
+.sidebar-box{
+    margin-bottom: 20px;
+    padding: 8px 24px;
+}
+.welcome{
+    padding-top: 16px;
+}
+.chat-wrap{
+    padding: 13px 24px;
+}
+.nav-wrap{
+    padding-left: 0;
+}
+.nav-wrap li{
+    display: inline-block;
+}
+.room-item{
+    padding-left: 8px;
+    padding-bottom: 8px ;
+    clear: both;
+}
+.room-item li{
+    list-style-type: none;
+    display: block;
+    float: left;
+    padding: 4px 0;
+}
+.room-item li i{
+    font-size: 16px;
+}
+.room-item li.name{
+    width: 45%;
+}
+.room-item li.creator{
+    width: 35%;
+}
+.room-item li.status{
+    width: 20%;
+    position: relative;
+    top: -2px;
+}
+.room-item li.name i{
+    position: relative;
+    top: -2px;
+}
+.room-item li.creator i{
+    position: relative;
+    top: 3px;
+}
+.room-item .status dt{
+    font-weight: normal;
+}
