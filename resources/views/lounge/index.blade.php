@@ -19,9 +19,9 @@
                    <div class="sidebar">
                         <ul class="profile">
                             <li class="user-info clearfix">
-                                <img class="img-circle img-raised img-responsive" src="./img/avatar/default.png">
-                                <span id="username">Rem Qange</span><br />
-                                <span><a id="logout" href="javascript:;">Log Out</a></span>
+                                <img class="img-circle img-raised img-responsive" src="{{ asset('/img/avatar/' . $avatar . '.png') }}">
+                                <span id="username">{{ $uname }}</span><br />
+                                <span><a id="logout" href="/logout">Log Out</a></span>
                             </li>
                         </ul>
                         <div class="card sidebar-box room-filter-wrap">
@@ -44,90 +44,32 @@
                                 <a href="{{ url('create') }}" class="btn btn-default"><i class="material-icons">group_add</i> Create Room</a>
                             </li>
                             <li role="presentation" class="text-muted rooms-info">
-                                <p>512 Rooms, 1024 Users</p>
+                                <p>{{ $room_count }} Rooms, {{ $user_count }} Users</p>
                             </li>
                         </ul>
                         <div class="rooms-list">
-                            <ul class="room-item">
-                                <li class="name">
-                                    <a href="javascript:;" title="Rriamore Academy">
-                                        <i class="material-icons text-danger">group</i> <span class="room-name">Rriamore Academy</span>
-                                    </a>
-                                </li>
-                                <li class="creator text-center"><i class="material-icons text-info">account_circle</i> Calggc</li>
-                                <li class="status">
-                                    <dl>
-                                        <dt class="text-muted">5/10</dt>
-                                        <dd>
-                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10" style="width: 50%;" >
-                                                <span class="sr-only">5/10</span>
+                            @foreach($rooms as $room)
+                                <ul class="room-item">
+                                    <li class="name">
+                                        <a href="/room/{{ $room->id}}" title="{{ $room->description or $room->name}}">
+                                            <i class="material-icons text-danger">group</i> <span class="room-name">{{ $room->name }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="creator text-center"><i class="material-icons text-info">account_circle</i> {{ $room->username }}</li>
+                                    <li class="status">
+                                        <dl>
+                                            <dt class="text-muted">{{ $room->number }}/{{ $room->capacity }}</dt>
+                                            <dd>
+                                                 <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ $room->number }}" aria-valuemin="0" aria-valuemax="{{ $room->capacity }}" style="width: {{ $room->number / $room->capacity * 100 }}%" >
+                                                    <span class="sr-only">5/10</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </dd>
-                                    </dl>
-                                </li>
-                            </ul>
-                            <ul class="room-item">
-                                <li class="name">
-                                    <a href="javascript:;" title="Rriamore Academy">
-                                        <i class="material-icons text-danger">group</i> <span class="room-name">Rriamore Academy</span>
-                                    </a>
-                                </li>
-                                <li class="creator text-center"><i class="material-icons text-info">account_circle</i> Calggc</li>
-                                <li class="status">
-                                    <dl>
-                                        <dt class="text-muted">5/10</dt>
-                                        <dd>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10" style="width: 50%;" >
-                                                <span class="sr-only">5/10</span>
-                                                </div>
-                                            </div>
-                                        </dd>
-                                    </dl>
-                                </li>
-                            </ul>
-                            <ul class="room-item">
-                                <li class="name">
-                                    <a href="javascript:;" title="Rriamore Academy">
-                                        <i class="material-icons text-danger">group</i> <span class="room-name">Rriamore Academy</span>
-                                    </a>
-                                </li>
-                                <li class="creator text-center"><i class="material-icons text-info">account_circle</i> Calggc</li>
-                                <li class="status">
-                                    <dl>
-                                        <dt class="text-muted">5/10</dt>
-                                        <dd>
-                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10" style="width: 50%;" >
-                                                <span class="sr-only">5/10</span>
-                                                </div>
-                                            </div>
-                                        </dd>
-                                    </dl>
-                                </li>
-                            </ul>
-                            <ul class="room-item">
-                                <li class="name">
-                                    <a href="javascript:;" title="Rriamore Academy">
-                                        <i class="material-icons text-danger">group</i> <span class="room-name">Rriamore Academy</span>
-                                    </a>
-                                </li>
-                                <li class="creator text-center"><i class="material-icons text-info">account_circle</i> Calggc</li>
-                                <li class="status">
-                                    <dl>
-                                        <dt class="text-muted">5/10</dt>
-                                        <dd>
-                                             <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10" style="width: 50%;" >
-                                                <span class="sr-only">5/10</span>
-                                                </div>
-                                            </div>
-                                        </dd>
-                                    </dl>
-                                </li>
-                            </ul>
+                                            </dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            @endforeach
                         </div>
                     </div>
                 </div>

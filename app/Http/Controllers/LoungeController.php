@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use App\Room;
+use App\User;
 
 /**
  * 休息室
@@ -18,7 +19,17 @@ class LoungeController extends Controller
      */
     public function index()
     {
-        return view('lounge.index');
+        $rooms = Room::all();
+        $room_count = $rooms->count();
+        $user_count = User::count();
+
+        return view('lounge.index', [
+            'uname'      => session('uname'),
+            'avatar'     => session('avatar'),
+            'rooms'      => $rooms,
+            'room_count' => $room_count,
+            'user_count' => $user_count
+        ]);
     }
 
     /**
@@ -59,5 +70,19 @@ class LoungeController extends Controller
 
             return redirect('lounge');
         }
+    }
+
+    /**
+     * 退出登录
+     * @return [type] [description]
+     */
+    public function logout()
+    {
+        Room::destroy((int)session('uid'));
+        session(['uid' => null]);
+        session(['uname' => null]);
+        session(['avatar' => null]);
+
+        return redirect()->route('login');
     }
 }
