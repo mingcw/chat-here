@@ -16,7 +16,7 @@ class LoginController extends Controller
         } else {
             $input = [
                 'username' => $request->input('username'),
-                'avatar'   => $request->input('avatar') ?: ''
+                'avatar'   => $request->input('avatar') ?: 'default'
             ];
 
             // 过滤
