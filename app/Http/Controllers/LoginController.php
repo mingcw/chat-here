@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -13,28 +14,35 @@ class LoginController extends Controller
         if (!$request->isMethod('post')) {
             return view('login.index');
         } else {
-            // 参数过滤
-            Validator::make($request->input(), [
-                'user'   => ['required', 'max:20'],
+            $input = [
+                'username' => $request->input('username'),
+                'avatar'   => $request->input('avatar') ?: ''
+            ];
+
+            // 过滤
+            Validator::make($input, [
+                'username'   => ['required', 'max:20'],
                 'avatar' => 'nullable'
             ])->validate();
             
-            // 用户剔重
-            $data = [
-                'user' => $request->input('user'),
-                'avatar' => $request->input('avatar', '')
-            ];
-            $uid = base64_encode($data['user']);
-            if (Cache::tags(['user'])->has($uid)) {
-                return back()->withErrors('User '.$data['user'].' has existed.');
+            // 剔重
+            if (User::where('username', $input['username'])->count()) {
+                return back()->withErrors('User '.$input['username'].' has existed.');
             }
 
-            // 生成缓存
-            Cache::tags(['user'])->forever($uid, $data);
+            // 入库
+            $uid = User::insertGetId([
+                'username'      => $input['username'],
+                'avatar'        => $input['avatar'],
+                'lastloginip'   => $request->ip(),
+                'lastlogintime' => time(),
+                'lastchattime'  => time()
+            ]);
 
-            // 记录会话
-            session('user', $data['user']);
-            session('uid', $uid);
+            // 记录
+            session(['uid'    => $uid]);
+            session(['uname'  => $input['username']]);
+            session(['avatar' => $input['avatar']]);
             
             return redirect('lounge');
         }

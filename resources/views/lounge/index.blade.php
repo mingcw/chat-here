@@ -41,7 +41,7 @@
                     <div class="card chat-wrap">
                         <ul class="nav-wrap">
                             <li role="presentation">
-                                <a href="create-room.html" class="btn btn-default"><i class="material-icons">group_add</i> Create Room</a>
+                                <a href="{{ url('create') }}" class="btn btn-default"><i class="material-icons">group_add</i> Create Room</a>
                             </li>
                             <li role="presentation" class="text-muted rooms-info">
                                 <p>512 Rooms, 1024 Users</p>

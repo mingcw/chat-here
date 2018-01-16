@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <a class="navbar-brand" href="#"><i class="fa fa-paper-plane"></i> Chat Here</a>
+            <a class="navbar-brand" href="/"><i class="fa fa-paper-plane"></i> Chat Here</a>
         </div>
     </div>
 </nav>
@@ -42,7 +42,7 @@
                                     <span class="input-group-addon">
                                         <i class="material-icons text-primary">face</i>
                                     </span>
-                                    <input type="text" class="form-control" name="user" placeholder="Username" maxlength="20" required="" autofocus="" autocomplete="off">
+                                    <input type="text" class="form-control" name="username" placeholder="Username" maxlength="20" required="" autofocus="" autocomplete="off">
                                 </div>
                                 <p class="text-center">
                                     <a href="javascript:;" id="settings-btn">Settings</a>

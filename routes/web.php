@@ -13,3 +13,4 @@
 
 Route::match(['get', 'post'], '/', 'LoginController@index')->name('login');
 Route::get('/lounge', 'LoungeController@index');
+Route::match(['get', 'post'], '/create', 'LoungeController@create');
