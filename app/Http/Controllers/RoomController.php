@@ -121,6 +121,15 @@ class RoomController extends Controller
                     'bubble'    => $bubble,
                     'content'   => '<a href="javascript:;" style="color: inherit;">@me</a> '.$content
                 ]));
+                $to_uname = $request->input('to_uname');
+                Gateway::sendToUid($uid, json_encode([
+                    'type'      => 'to',
+                    'uid'       => $uid,
+                    'uname'     => $uname,
+                    'avatar'    => $avatar,
+                    'bubble'    => $bubble,
+                    'content'   => '<a href="javascript:;" style="color: inherit;">@'.$to_uname.'</a> '.$content
+                ]));
                 break;
             default:
                 break;

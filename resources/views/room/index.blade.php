@@ -74,23 +74,7 @@
 <!-- end navbar -->
 
 <div class="chat-wrap">
-    <dl class="chat-item clearfix">
-        <dt class="pull-left">
-            <div class="text-center">
-                <img class="img-rounded" src="./img/avatar/avatar2.png" title="Loren">
-            </div>
-            <div class="dropdown username text-white">
-                <a href="javascript:;" data-toggle="dropdown" title="Loren">Loren</a>
-                <ul class="dropdown-menu">
-                    <li><a class="at-somebody" href="javascript:;">@Loren</a></li>
-                    <li><a class="dm" href="javascript:;">DM</a></li>
-                </ul>
-            </div>
-        </dt>
-        <dd class="pull-left">
-            <p class="say bubble bubble-purple">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Derunt dicta itaque. Deleniti quas qui ratione dolorem, culpa iste repudiandae.</p>
-        </dd>
-    </dl>
+    
 </div>
 
 <!-- Audio Player -->
@@ -232,6 +216,7 @@
                 $.post('{{ url("say") }}', {
                     type: 'to',
                     to_uid: $('.to-whom').children('span').attr('id'),
+                    to_uname: $('.to-whom').children('span').text(),
                     content: content,
                     _token: '{{ csrf_token() }}'
                 }, function(data) {}, 'json');
