@@ -16,3 +16,5 @@ Route::get('/lounge', 'LoungeController@index');
 Route::match(['get', 'post'], '/create', 'LoungeController@create');
 Route::get('/logout', 'LoungeController@logout');
 Route::get('/room/{id}', 'RoomController@index');
+Route::post('/bind', 'RoomController@bind');
+Route::post('/say', 'RoomController@say');
