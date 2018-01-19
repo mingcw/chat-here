@@ -29,7 +29,7 @@
                               <input id="serachInput" type="text" class="form-control" placeholder="Search Room...">
                             </div>
                         </div>
-                        <div class="card sidebar-box welcome">
+                        <div class="card sidebar-box welcome hidden-sm hidden-xs">
                             <p>Talk to a stranger here.</p>
                             <p>"Simplicity does not precede complexity, but follows it" -- Alan Perlis</p>
                         </div>
@@ -79,7 +79,7 @@
             <div class="row">
                  <div class="col-md-8">
                     <footer class="text-white text-center">
-                        Copyright @2018 mingcw · GitHub
+                        
                     </footer>
                 </div>
             </div>
