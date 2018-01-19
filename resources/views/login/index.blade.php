@@ -26,14 +26,14 @@
             <!-- here you can add your content -->
             <div class="row">
                 <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-                    <div class="card card-login">
+                    <div class="card">
                         <div class="card-header">
                             <div class="logo">
                                 <i class="fa fa-paper-plane text-primary"></i>
                             </div>
                         </div>
                         <div class="card-body">
-                            <form id="login-form" method="post" action="">
+                            <form method="post" action="">
                                 {{ csrf_field() }}
                                 <div class="input-group hidden">
                                     <input id="avatar" type="hidden" name="avatar" id="inputAvatar" class="form-control" value="">
@@ -42,13 +42,22 @@
                                     <span class="input-group-addon">
                                         <i class="material-icons text-primary">face</i>
                                     </span>
-                                    <input type="text" class="form-control" name="username" placeholder="Username" maxlength="20" required="" autofocus="" autocomplete="off">
+                                    <input type="text" class="form-control" name="username" placeholder="Username" maxlength="20" required="" autofocus="">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="material-icons text-primary">lock_outline</i>
+                                    </span>
+                                    <input type="password" class="form-control" name="password" placeholder="Password" maxlength="40" required="">
                                 </div>
                                 <p class="text-center">
                                     <a href="javascript:;" id="settings-btn">Settings</a>
                                 </p>
                                 <p class="text-center">
-                                    <button type="submit" class="btn btn-round btn-primary">Log In</button>
+                                    <button type="submit" class="btn btn-round btn-primary">Login</button>
+                                </p>
+                                <p class="text-center clearfix">
+                                    <a href="{{ asset('register') }}" class="pull-right">Register</a>
                                 </p>
                                 @if (count($errors) > 0)
                                     <div id="alert-danger" class="alert alert-danger">
