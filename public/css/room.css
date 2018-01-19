@@ -103,7 +103,7 @@ ul.menu{
 }
 .chat-wrap{
     max-width: 720px;
-    margin: 232px auto 0;
+    margin: 176px auto 0;
 }
 .chat-item{
     margin: 16px 0 10px;
@@ -280,6 +280,9 @@ ul.menu{
     }
     .users-list>li{
         float: left;
+    }
+    .chat-wrap{
+        margin-top: 200px;
     }
 }
 .system.notify{
