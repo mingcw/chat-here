@@ -34,7 +34,7 @@ class LoginController extends Controller
             // 校验
             $user = User::where('username', $input['username'])->first();
             if (!$user) {
-                return back()->withErrors($input['username']." deesn't exist.");
+                return back()->withErrors($input['username']." doesn't exist.");
             } else if (md5($input['password']) != $user->password) {
                 return back()->withErrors("Password is invalid.");
             }
