@@ -1,3 +1,10 @@
+body{
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif, "Microsoft Yahei";
+    font-size: 15px;
+    background: #5c0061;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #5c0061, #ff8989);  /* Chrome 10-35, Safari 5.1-6 */
+    background: linear-gradient(to left, #5c0061, #ff8989); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
 .message-wrap{
     position: fixed;
     left: 0;
