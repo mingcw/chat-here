@@ -238,7 +238,7 @@
 
             var $span = $('.to-whom').removeClass('hidden').children('span');
             var $a    = $(this).parent().prev().children('a');
-            $span.attr('id', $(this).attr('id')).text($a.text().substr(1));
+            $span.attr('id', $(this).attr('id')).text($a.text().substr(1).replace('(me)', ''));
             $('#post-message-area').addClass('private').focus();
         });
 
@@ -529,8 +529,9 @@
     function flush_users_list(users_list) {
         var html = '';
         for (uid in users_list) {
+            me = (users_list[uid]=='{{ $uname }}' ? '(me)' : '');
             html += '<li class="dropdown">\
-                        <a href="javascript:;" data-toggle="dropdown" title="'+ users_list[uid] +'"><i class="material-icons">account_circle</i> '+ users_list[uid] +'</a>\
+                        <a href="javascript:;" data-toggle="dropdown" title="' + users_list[uid] + me +'"><i class="material-icons">account_circle</i> '+ users_list[uid] + me +'</a>\
                         <ul class="dropdown-menu">\
                             <li><a class="at-somebody" id="'+ uid +'" href="javascript:;">@'+ users_list[uid] +'</a></li>\
                             <li><a class="dm" id="'+ uid +'" href="javascript:;">DM</a></li>\
@@ -538,7 +539,7 @@
                      </li>';
         }
         $('#users-list').empty().append(html);
-        $('#current-number').text(users_list.length);
+        // $('#current-number').text(users_list.length);
         fix_offset_y();
     }
     </script>
