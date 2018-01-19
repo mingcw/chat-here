@@ -12,7 +12,7 @@
     <div class="menu-bar">
         <div class="clearfix menu-tool">
             <h4 class="room-name">
-                <span class="room-name-capacity text-muted">5/10</span>
+                {{-- <span class="room-name-capacity text-muted"><span id="current-number">{{ $room->number }}</span>/{{ $room->capacity }}</span> --}}
                 <span class="room-name-title">{{ $room->name }}</span>
             </h4>
             <ul class="menu clearfix">
@@ -22,13 +22,13 @@
                 <li class="dropdown">
                     <a id="dropdown-settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons">settings</i></a>
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-settings">
-                        <li><a href="javascript:;"><i class="material-icons">exit_to_app</i> Leave</a></li>
+                        <li><a href="{{ url('leave') }}" id="leave-room"><i class="material-icons">exit_to_app</i> Leave</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="javascript:;"><i class="material-icons">close</i> Log out</a></li>
+                        <li><a href="{{ url('logout') }}"><i class="material-icons">close</i> Log out</a></li>
                     </ul>
                 </li>
             </ul>
-            <span class="to-whom hidden">@<span>Gan Sang ggc</span><a href="javascript:;">(Cancel)</a></span>
+            <span class="to-whom hidden">@<span></span><a href="javascript:;">(Cancel)</a></span>
         </div>
         <div id="post-one-form" class="post-wrap">
             <form action="" method="" role="form">
@@ -48,27 +48,7 @@
         <span class="more">new messages</span>
     </div>
     <ul id="users-list" class="users-list clearfix">
-        <li class="dropdown" title="Loren cccccccccccccc">
-            <a href="javascript:;" data-toggle="dropdown" title="Loren cccccccccccccc"><i class="material-icons">account_circle</i> Loren cccccccccccccc</a>
-            <ul class="dropdown-menu">
-                <li><a class="at-somebody" href="javascript:;">@Loren cccccccccccccc</a></li>
-                <li><a class="dm" href="javascript:;">DM</a></li>
-            </ul>
-        </li>
-        <li class="dropdown" title="Loren">
-            <a href="javascript:;" data-toggle="dropdown" title="Loren"><i class="material-icons">account_circle</i> Loren</a>
-            <ul class="dropdown-menu">
-                <li><a class="at-somebody" href="javascript:;">@Loren</a></li>
-                <li><a class="dm" href="javascript:;">DM</a></li>
-            </ul>
-        </li>
-        <li class="dropdown" title="Loren">
-            <a href="javascript:;" data-toggle="dropdown" title="Loren"><i class="material-icons">account_circle</i> Loren</a>
-            <ul class="dropdown-menu">
-                <li><a class="at-somebody" href="javascript:;">@Loren</a></li>
-                <li><a class="dm" href="javascript:;">DM</a></li>
-            </ul>
-        </li> 
+        
     </ul>
 </div>
 <!-- end navbar -->
@@ -177,7 +157,6 @@
         //     }
         // });
 
-        fix_offset_y(false);     // 必需
         // connection_lost(true);   // 测试
         // new_message(1);       // 测试
         // system_notify('@mingcw has logged in.'); // 测试
@@ -269,6 +248,98 @@
             $(this).siblings('span').text('').parent('.to-whom').addClass('hidden');
             $('#post-message-area').removeClass('private');
         });
+
+        /** Websocket js start */
+
+        // Let the library know where WebSocketMain.swf is:
+        WEB_SOCKET_SWF_LOCATION = '{{ url("/swf/WebSocketMain.swf") }}';
+
+        // Write your code in the same way as for native WebSocket:
+        (function connect() {
+            var ws = new WebSocket("ws://" + document.domain + ":7272");
+        
+            ws.onopen = function() {
+                connection_lost(false); // 隐藏连接丢失条
+            };
+
+            ws.onmessage = function(e) {
+                var data = JSON.parse(e.data),
+                    type = data.type || '';
+                
+                switch (type) {
+                    case 'ping':
+                        // console.log(data);
+                        break;
+                    case 'init':
+                        $.post('{{ url("bind") }}', {
+                            client_id: data.client_id,
+                            bubble: bubble,
+                            _token: "{{ csrf_token() }}"
+                        }, function(data) {}, 'json');
+                        break;
+                    case 'comein':
+                        // console.log(data);
+                        if (data.uname) { // 群发的系统通知：萌新进入
+                            system_notify('@'+ data.uname + ' came in.');
+                        }
+                        if (data.users_list) { // 单发来的用户列表
+                            flush_users_list(data.users_list); // 刷新用户列表
+                        }
+                        break;
+                    case 'all':
+                    case 'to' :
+                        var html = '<dl class="chat-item clearfix">\
+                                        <dt class="pull-left">\
+                                            <div class="text-center">\
+                                                <img class="img-rounded" src="{{ asset("/img/avatar/") }}'+ '/' + data.avatar + '.png" title="' + data.uname + '">\
+                                            </div>\
+                                            <div class="dropdown username text-white">\
+                                                <a href="javascript:;" data-toggle="dropdown" title="' + data.uname + '">' + data.uname + '</a>\
+                                                <ul class="dropdown-menu">\
+                                                     <li><a class="at-somebody" id="'+ data.uid +'" href="javascript:;">@' + data.uname + '</a></li>\
+                                                     <li><a class="dm" id="'+ data.uid +'" href="javascript:;">DM</a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </dt>\
+                                        <dd class="pull-left">\
+                                            <p class="say bubble bubble-' + data.bubble + '">' + data.content + '</p>\
+                                        </dd>\
+                                    </dl>';
+                        $(html).prependTo('.chat-wrap');
+                        $('html, body').animate({scrollTop: 0}, 'fast');
+                        $('#unread-box').click();
+                        break;
+                    case 'close':
+                        // 通知有人退出
+                        system_notify('@' + data.uname + ' leaved out.');
+
+                        // 请求新的用户列表
+                        $.post('/flush', {
+                            room_id: {{ $room_id }},
+                            _token: '{{ csrf_token() }}'
+                        }, function(data) { });
+                        break;
+                    case 'flush':
+                        console.log('刷新用户列表：', data);
+                        flush_users_list(data.users_list);
+                        break;
+                    default :
+                        alert(e.data);
+                }
+            };
+
+            ws.onerror = function() {
+                console.log('连接出错');
+            }
+
+            ws.onclose = function() {
+                console.log('连接关闭，正在重连');
+                connection_lost(true); // 显示连接丢失
+                connect(); // 重连
+            };
+        })();
+
+        /** Websocket js end */
 
         /** 音乐js start */
 
@@ -403,84 +474,6 @@
             }
         });
         /** 音乐js end */
-       
-        /** Websocket js start */
-
-        // Let the library know where WebSocketMain.swf is:
-        WEB_SOCKET_SWF_LOCATION = '{{ url("/swf/WebSocketMain.swf") }}';
-
-        // Write your code in the same way as for native WebSocket:
-        (function connect() {
-            var ws = new WebSocket("ws://" + document.domain + ":7272");
-        
-            ws.onopen = function() {
-                connection_lost(false); // 隐藏连接丢失条
-            };
-
-            ws.onmessage = function(e) {
-                var data = JSON.parse(e.data),
-                    type = data.type || '';
-                
-                switch (type) {
-                    case 'ping':
-                        // console.log(data);
-                        break;
-                    case 'init':
-                        $.post('{{ url("bind") }}', {
-                            client_id: data.client_id,
-                            bubble: bubble,
-                            _token: "{{ csrf_token() }}"
-                        }, function(data) {}, 'json');
-                        break;
-                    case 'comein':
-                        // console.log(data);
-                        if (data.uname) { // 群发的系统通知：萌新进入
-                            system_notify('@'+ data.uname + ' has come in.');
-                        }
-                        if (data.users_list) { // 单发来的用户列表
-                            flush_users_list(data.users_list); // 刷新用户列表
-                        }
-                        break;
-                    case 'all':
-                    case 'to' :
-                        var html = '<dl class="chat-item clearfix">\
-                                        <dt class="pull-left">\
-                                            <div class="text-center">\
-                                                <img class="img-rounded" src="{{ asset("/img/avatar/") }}'+ '/' + data.avatar + '.png" title="' + data.uname + '">\
-                                            </div>\
-                                            <div class="dropdown username text-white">\
-                                                <a href="javascript:;" data-toggle="dropdown" title="' + data.uname + '">' + data.uname + '</a>\
-                                                <ul class="dropdown-menu">\
-                                                     <li><a class="at-somebody" id="'+ data.uid +'" href="javascript:;">@' + data.uname + '</a></li>\
-                                                     <li><a class="dm" id="'+ data.uid +'" href="javascript:;">DM</a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </dt>\
-                                        <dd class="pull-left">\
-                                            <p class="say bubble bubble-' + data.bubble + '">' + data.content + '</p>\
-                                        </dd>\
-                                    </dl>';
-                        $(html).prependTo('.chat-wrap');
-                        $('html, body').animate({scrollTop: 0}, 'fast');
-                        $('#unread-box').click();
-                        break;
-                    default :
-                        alert(e.data);
-                }
-            };
-
-            ws.onerror = function() {
-                console.log('连接出错');
-            }
-
-            ws.onclose = function() {
-                console.log('连接关闭，正在重连');
-                connection_lost(true); // 显示连接丢失
-                connect(); // 重连
-            };
-        })();
-
-        /** Websocket js end */
     });
 
     // alert 框
@@ -508,7 +501,7 @@
             counter = parseInt(counter);
             $msg_box.removeClass('hidden');
             $msg_box.children('.counter').text(counter);
-            $msg_box.children('.single, .more').removeClass('hidden').addClass('hidden');
+            $msg_box.children('.single, .more').addClass('hidden');
             if (counter === 1) {
                 $msg_box.children('.single').removeClass('hidden');
             } else {
@@ -524,17 +517,12 @@
     }
 
     // 修正.chat-wrap元素的margin-top值
-    function fix_offset_y(is_animate = true) {
+    function fix_offset_y() {
         var h = $('.message-wrap').height();
 
-        var $chat_wrap = $('.chat-wrap');
-        if (is_animate) {
-            $chat_wrap.animate({
-                marginTop: (h + 15) + 'px'
-            }, 'fast');
-        } else {
-            $chat_wrap.css('margin-top', (h + 15) + 'px');
-        }
+        $('.chat-wrap').animate({
+            marginTop: (h + 20) + 'px'
+        }, 'fast');
     }
 
     // 刷新房间用户列表
@@ -550,6 +538,8 @@
                      </li>';
         }
         $('#users-list').empty().append(html);
+        $('#current-number').text(users_list.length);
+        fix_offset_y();
     }
     </script>
 @endsection

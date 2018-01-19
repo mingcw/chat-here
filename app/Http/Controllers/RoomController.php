@@ -14,7 +14,7 @@ class RoomController extends Controller
     }
 
     /**
-     * 聊天室内
+     * 进入房间
      * @param  Request $request [description]
      * @param  id      $id      [description]
      * @return [type]           [description]
@@ -23,19 +23,26 @@ class RoomController extends Controller
     {
         $room   = Room::find($id);
         if (!$room) {
-            return redirect('lounge');
+            return redirect('lounge');          // 房间不存在，重定向到休息室
         }
+        if ($room->number >= $room->capacity) {
+            return redirect('lounge');          // 房间满客了，重定向到休息室
+        }
+        $room_id = session('room_id');
+        if ($room_id && $room_id != $id) {
+            return redirect('room/'. $room_id); // 重定向到之前从网页关闭的房间里
+        }
+
         $uname  = session('uname');
         $avatar = session('avatar');
-
-        session(['room_id' => $id]);
+        session(['room_id' => $id]);            // 记录所在房间号s
 
         return view('room.index', [
-            'room'   => $room,
-            'uname'  => $uname,
-            'avatar' => $avatar
+            'room'    => $room,
+            'uname'   => $uname,
+            'avatar'  => $avatar,
+            'room_id' => $id
         ]);
-
     }
 
     /**
@@ -58,9 +65,9 @@ class RoomController extends Controller
         Gateway::joinGroup($client_id, $room_id);
 
         // 记录会话
-        session(['client_id' => $client_id]);
-        session(['bubble' => $bubble]);
-        Gateway::setSession($client_id, [
+        session(['client_id' => $client_id]); // Laravel 负责
+        session(['bubble' => $bubble]);       // Laravel 负责
+        Gateway::setSession($client_id, [     // GatewayWorker 负责
             'uid'     => $uid,
             'uname'   => $uname,
             'avatar'  => $avatar,
@@ -68,21 +75,20 @@ class RoomController extends Controller
             'room_id' => $room_id
         ]);
 
-        // 房间内广播：萌新进来了
-        Gateway::sendToGroup($room_id, json_encode([
-            'type'      => 'comein',
-            'uname'     => $uname
-        ]));
-
-        // 给萌新发送房间客户列表
+        // 房间内广播：萌新进入，发送最新的用户列表
         $sessions = Gateway::getClientSessionsByGroup($room_id);
         $users_list = [];
         foreach ($sessions as $client_id => $item) {
             $users_list[$item['uid']] = $item['uname'];
         }
-        $new_message = ['type' => 'comein'];
-        $new_message['users_list'] = $users_list;
-        Gateway::sendToUid($uid, json_encode($new_message));
+        Gateway::sendToGroup($room_id, json_encode([
+            'type'       => 'comein',
+            'uname'      => $uname,
+            'users_list' => $users_list
+        ]));
+
+        // 更新房间人数
+        Room::where('id', $room_id)->update(['number' => count($users_list)]);
     }
 
     /**
@@ -134,5 +140,45 @@ class RoomController extends Controller
             default:
                 break;
         }
+    }
+
+    /**
+     * 刷新房间用户列表
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function flush(Request $request)
+    {
+        $room_id = $request->input('room_id');
+        $sessions = Gateway::getClientSessionsByGroup($room_id);
+        $users_list = [];
+        foreach ($sessions as $client_id => $item) {
+            $users_list[$item['uid']] = $item['uname'];
+        }
+        $new_message = ['type' => 'flush'];
+        $new_message['users_list'] = $users_list;
+        Gateway::sendToGroup($room_id, json_encode($new_message));
+
+        // 更新房间人数
+        Room::where('id', $room_id)->update(['number' => count($users_list)]);
+    }
+
+    /**
+     * 离开房间
+     * @return [type] [description]
+     */
+    public function leave()
+    {
+        $room_id = session('room_id');
+
+        $room = Room::find($room_id);
+        if($room->number > 1){
+            Room::where('id', $room_id)->update(['number' => $room->number - 1]);
+        } else {
+            Room::where('id', $room_id)->update(['number' => 00000000000000000]); // 整齐多了-_-||
+        }
+        session(['room_id' => null]);
+
+        return redirect('lounge'); // 重定向到休息室
     }
 }
