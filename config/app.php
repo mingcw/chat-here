@@ -177,6 +177,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * 逆向数据库导出Seeder
+         */
+        Orangehill\Iseed\IseedServiceProvider::class,
     ],
 
     /*
