@@ -35,7 +35,7 @@ class RoomController extends Controller
 
         $uname  = session('uname');
         $avatar = session('avatar');
-        session(['room_id' => $id]);            // 记录所在房间号s
+        session(['room_id' => $id]);            // 记录所在房间号
 
         return view('room.index', [
             'room'    => $room,
