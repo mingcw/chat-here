@@ -57,6 +57,10 @@ mysql>exit;
 
 4、配置`.env`
 
+```
+cp .env.example .env
+```
+
 (a) 以下字段
 
 ```
