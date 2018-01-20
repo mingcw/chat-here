@@ -101,18 +101,8 @@
                 <span class="material-input"></span>
             </div>
             <div class="form-group label-floating is-empty">
-                <label class="control-label">Author</label>
-                <input type="text" name="music-author" class="form-control" maxlength="40">
-                <span class="material-input"></span>
-            </div>
-            <div class="form-group label-floating is-empty">
-                <label class="control-label">Url</label>
+                <label class="control-label">Url (must)</label>
                 <input type="text" name="music-src" class="form-control" maxlength="240">
-                <span class="material-input"></span>
-            </div>
-            <div class="form-group label-floating is-empty">
-                <label class="control-label">Cover Url</label>
-                <input type="text" name="music-cover" class="form-control" maxlength="240">
                 <span class="material-input"></span>
             </div>
         </div>
@@ -144,17 +134,6 @@
     <script src="{{ asset('js/web_socket.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
     $(function () {
-        var music_type = 'cloud';
-        // var player = new skPlayer({
-        //     autoplay: true,
-        //     listshow: false, // 设置为true时播放列表位置异常
-        //     mode: 'listloop',
-        //     music: {
-        //         type: 'cloud',
-        //         source: 317921676
-        //     }
-        // });
-
         // connection_lost(true);   // 测试
         // new_message(1);       // 测试
         // system_notify('@mingcw has logged in.'); // 测试
@@ -346,7 +325,8 @@
             $('#music-settings-modal').modal('toggle');
         });
 
-        // 设置音乐类型
+        // 选择音乐类型
+        var music_type = 'cloud';
         $('input[name="music-type"]').change(function(e) {
             e.preventDefault();
 
@@ -373,10 +353,10 @@
                 var playist_id = parseInt($('input[name="netease-cloud-music-playist-id"]').val().trim());
                 
                 if (playist_id) {
-                    if (player) { // 全局的
-                        player.destroy();
+                    if (window.player instanceof skPlayer) { // 全局的
+                        window.player.destroy();
                     }
-                    player = new skPlayer({
+                    window.player = new skPlayer({
                         autoplay: true,
                         listshow: false, // 设置为true时播放列表位置异常
                         mode: 'listloop',
@@ -390,15 +370,13 @@
                 }
             } else if(music_type == 'file') {
                 var name = $('input[name="music-name"]').val().trim() || 'Undefined',
-                    author = $('input[name="music-author"]').val().trim() || 'Undefined',
                     src = $('input[name="music-src"]').val().trim() || '',
-                    cover = $('input[name="music-cover"]').val().trim() || '';
 
                 if (src.match(/((http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig)) {
-                    if (player) { // 全局的
-                        player.destroy();
+                    if (window.player instanceof skPlayer) { // 全局的
+                        window.player.destroy();
                     }
-                    player = new skPlayer({
+                    window.player = new skPlayer({
                         autoplay: true,
                         listshow: false, // 设置true时播放列表位置异常
                         mode: 'listloop',
@@ -407,9 +385,9 @@
                             source: [
                                 {
                                     name: name,
-                                    author: author,
+                                    author: '',
                                     src: src,
-                                    cover: cover
+                                    cover: 'http://p1.music.126.net/N5DY2sjaktiGvtAr1pspQw==/7720770650777600.jpg?param=200y200'
                                 }
                             ]
                         }

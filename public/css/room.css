@@ -251,6 +251,7 @@ ul.menu{
     margin-top: 0;
 }
 #music-player{
+    display: none;
     position: fixed;
     left: -380px;
     bottom: 0;
