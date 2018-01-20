@@ -97,7 +97,17 @@ php srtisan db:seed
 chmod -R 0777 storage/
 ```
 
-8、浏览器里访问 http://your_virtual_host
+8、启动 GatewayWorker
+
+```
+cd gatewayworker/
+composer install
+php start.php start -d
+```
+
+更多 GatewayWorker 启动停止命令，请参考[文档](http://doc2.workerman.net/326106）。
+
+9、浏览器访问 http://your_virtual_host
 
 ## 测试账号
 
