@@ -23,4 +23,5 @@ Route::group(['middleware' => ['checklogin']], function () {
     Route::post('/say', 'RoomController@say');
     Route::post('/flush', 'RoomController@flush');
     Route::get('/leave', 'RoomController@leave');
+    Route::post('/music', 'RoomController@music');
 });

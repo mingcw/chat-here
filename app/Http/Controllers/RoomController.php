@@ -183,4 +183,33 @@ class RoomController extends Controller
 
         return redirect('lounge'); // 重定向到休息室
     }
+
+    /**
+     * 播放音乐
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function music(Request $request)
+    {
+        $music_type = $request->input('music_type');
+        $room_id = session('room_id');
+
+        if ($music_type == 'cloud') {      // 基于 skPlayer 播放器的两种格式之一：网易云音乐歌单
+            $playlist_id = $request->input('playlist_id');
+            Gateway::sendToGroup($room_id, json_encode([
+                'type' => 'music',
+                'music_type' => $music_type,
+                'playlist_id' => $playlist_id
+            ]));
+        } else if ($music_type == 'file') { // 基于 skPlayer 播放器的两种格式之一：自定义url文件
+            $name = $request->input('name');
+            $src = $request->input('src');
+            Gateway::sendToGroup($room_id, json_encode([
+                'type' => 'music',
+                'music_type' => $music_type,
+                'name' => $name,
+                'src'  => $src
+            ]));
+        }        
+    }
 }

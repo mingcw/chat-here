@@ -90,7 +90,7 @@
         <div class="music-cloud-group">
             <div class="form-group label-floating is-empty">
                 <label class="control-label">Playist ID</label>
-                <input type="text" name="netease-cloud-music-playist-id" class="form-control" maxlength="12">
+                <input type="text" name="netease-cloud-music-playlist-id" class="form-control" maxlength="12">
                 <span class="material-input"></span>
             </div>
         </div>
@@ -296,8 +296,47 @@
                         }, function(data) { });
                         break;
                     case 'flush':
-                        console.log('刷新用户列表：', data);
+                        // console.log('刷新用户列表：', data);
                         flush_users_list(data.users_list);
+                        break;
+                    case 'music':
+                        // console.log('收到音乐歌单：', data);
+                        if (data.music_type == 'cloud') {
+                            if (window.player instanceof skPlayer) { // 销毁已存在的播放器实例，全局的
+                                window.player.destroy();
+                            }
+                            window.player = new skPlayer({
+                                autoplay: true,
+                                listshow: false, // 设置为true时播放列表位置异常
+                                mode: 'listloop',
+                                music: {
+                                    type: 'cloud',
+                                    source: data.playlist_id
+                                }
+                            });
+                            $('#music-player').show();
+                        } else if(data.music_type == 'file') {
+                            if (window.player instanceof skPlayer) { // 全局的
+                                window.player.destroy();
+                            }
+                            window.player = new skPlayer({
+                                autoplay: true,
+                                listshow: false, // 设置true时播放列表位置异常
+                                mode: 'listloop',
+                                music: {
+                                    type: 'file',
+                                    source: [
+                                        {
+                                            name: data.name,
+                                            author: '',
+                                            src: data.src,
+                                            cover: 'http://p1.music.126.net/N5DY2sjaktiGvtAr1pspQw==/7720770650777600.jpg?param=200y200'
+                                        }
+                                    ]
+                                }
+                            });
+                            $('#music-player').show();
+                        }
                         break;
                     default :
                         alert(e.data);
@@ -325,9 +364,8 @@
             $('#music-settings-modal').modal('toggle');
         });
 
-        // 选择音乐类型
-        var music_type = 'cloud';
-        $('input[name="music-type"]').change(function(e) {
+        // 选择音乐类型，显示相应选项
+        $('input[name="music-type"]').change(function(e) {console.log('音乐类型改变');
             e.preventDefault();
 
             var type = $(this).val().trim(),
@@ -336,12 +374,10 @@
 
             if (type == 'cloud') {
                 $cloud_group.removeClass('hidden');
-                $customize_group.removeClass('hidden').addClass('hidden');
-                music_type = type;
+                $customize_group.addClass('hidden');
             } else if(type == 'file') {
                 $customize_group.removeClass('hidden');
-                $cloud_group.removeClass('hidden').addClass('hidden');
-                music_type = type;
+                $cloud_group.addClass('hidden');
             }
         });
 
@@ -349,49 +385,34 @@
         $('#music-play-btn').on('click', function(e) {
             e.preventDefault();
 
+            var music_type = $('input[name="music-type"]:checked').val();
             if (music_type == 'cloud') {
-                var playist_id = parseInt($('input[name="netease-cloud-music-playist-id"]').val().trim());
+                var playlist_id = parseInt($('input[name="netease-cloud-music-playlist-id"]').val().trim());
                 
-                if (playist_id) {
-                    if (window.player instanceof skPlayer) { // 全局的
-                        window.player.destroy();
-                    }
-                    window.player = new skPlayer({
-                        autoplay: true,
-                        listshow: false, // 设置为true时播放列表位置异常
-                        mode: 'listloop',
-                        music: {
-                            type: 'cloud',
-                            source: playist_id
-                        }
-                    });
+                if (playlist_id) {
+
+                    $.post('{{ url("music") }}', { // 提交网易云音乐歌单ID
+                        music_type: music_type,
+                        playlist_id: playlist_id,
+                        _token : '{{ csrf_token() }}'
+                    }, function(data) {}, 'json');
+
                 } else {
-                    alert_modal('Error Id: ' + playist_id);
+                    alert_modal('Error Id: ' + playlist_id);
                 }
             } else if(music_type == 'file') {
-                var name = $('input[name="music-name"]').val().trim() || 'Undefined',
-                    src = $('input[name="music-src"]').val().trim() || '',
+                var name = $('input[name="music-name"]').val().trim() || 'Undefined';
+                var src = $('input[name="music-src"]').val().trim() || '';
 
                 if (src.match(/((http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig)) {
-                    if (window.player instanceof skPlayer) { // 全局的
-                        window.player.destroy();
-                    }
-                    window.player = new skPlayer({
-                        autoplay: true,
-                        listshow: false, // 设置true时播放列表位置异常
-                        mode: 'listloop',
-                        music: {
-                            type: 'file',
-                            source: [
-                                {
-                                    name: name,
-                                    author: '',
-                                    src: src,
-                                    cover: 'http://p1.music.126.net/N5DY2sjaktiGvtAr1pspQw==/7720770650777600.jpg?param=200y200'
-                                }
-                            ]
-                        }
+                    
+                    $.post('{{ url("music") }}', { // 提交自定义音乐url地址
+                        music_type: music_type,
+                        name: name,
+                        src: src,
+                        _token: '{{ csrf_token() }}'
                     });
+
                 } else {
                     alert_modal('Url is ' + (src?'invalid':'empty') );
                 }
