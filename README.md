@@ -105,7 +105,7 @@ composer install
 php start.php start -d
 ```
 
-更多 GatewayWorker 启动停止命令，请参考[文档](http://doc2.workerman.net/326106）。
+更多 GatewayWorker 启动停止命令，请参考 [文档](http://doc2.workerman.net/326106)。
 
 9、浏览器访问 http://your_virtual_host
 
