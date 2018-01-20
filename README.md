@@ -2,7 +2,7 @@
 
 基于 Laravel 5.4 和 GatewayWorker 3.0 的响应式聊天室。
 
-**运行截图**在最后。
+运行**截图**在最后。
 
 ## 框架/库/插件
 
@@ -17,6 +17,7 @@
 ## 环境/工具
 
 * LAMP (Ubuntu17.10 + Apache2 + MySQL + PHP5.6)
+* Bash
 * Sublime Text 3
 * phpmyadmin
 * GitKraken
@@ -56,7 +57,7 @@ mysql>exit;
 
 4、配置`.env`
 
-a) 以下字段
+(a) 以下字段
 
 ```
 APP_NAME='Chat Here'
@@ -71,7 +72,8 @@ DB_USERNAME=your_name
 DB_PASSWORD=your_password
 ```
 
-b) 生成｀APP_KEY｀
+(b) 生成`APP_KEY`
+
 
 ```
 php artisan key:generate
@@ -107,7 +109,8 @@ chmod -R 0777 storage/
 
 ## 说明
 
-目录音乐播放器使用已封装好的 HTML5 插件（我是地址），部分网易云音乐的歌单能拉取出来，但无法播放。
+目录音乐播放器使用已封装好的 HTML5 插件，部分网易云音乐的歌单能拉取出来，但无法播放。
 
 ## 协议
+
 [MIT](./LICENSE)
