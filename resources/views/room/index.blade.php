@@ -17,7 +17,6 @@
             </h4>
             <ul class="menu clearfix">
                 <li><a id="post-one-btn" href="javascript:;"><i class="material-icons">chat</i></a></li>
-                <li><a id="music-settings-btn" href="javascript:;"><i class="material-icons">library_music</i></a></li>
                 <li><a id="users-list-btn" href="javascript:;"><i class="material-icons">account_circle</i></a></li>
                 <li class="dropdown">
                     <a id="dropdown-settings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons">settings</i></a>
@@ -57,74 +56,6 @@
     
 </div>
 
-<!-- Audio Player -->
-<div id="music-player">
-    <div id="skPlayer"></div>
-    <div id="player-switch-btn" class="switch-btn"><i class="material-icons">music_note</i></div>
-</div>
-
-<!-- Music Settings Modal Core -->
-<div class="modal fade modal-chat" id="music-settings-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Music</h4>
-      </div>
-      <div class="modal-body">
-        <div class="form-group music-type-group">
-            <label>Type</label>
-            <div class="radio">
-                <label>
-                    <input type="radio" name="music-type" value="cloud" checked=""><span class="circle"></span><span class="check"></span>
-                    NetEase Cloud Music
-                </label>
-            </div>            
-            <div class="radio">
-                <label>
-                    <input type="radio" name="music-type" value="file"><span class="circle"></span><span class="check"></span>
-                    Customize
-                </label>
-            </div>
-        </div>
-        <div class="music-cloud-group">
-            <div class="form-group label-floating is-empty">
-                <label class="control-label">Playist ID</label>
-                <input type="text" name="netease-cloud-music-playist-id" class="form-control" maxlength="12">
-                <span class="material-input"></span>
-            </div>
-        </div>
-        <div class="music-customize-group hidden">
-            <div class="form-group label-floating is-empty">
-                <label class="control-label">Name</label>
-                <input type="text" name="music-name" class="form-control" maxlength="40">
-                <span class="material-input"></span>
-            </div>
-            <div class="form-group label-floating is-empty">
-                <label class="control-label">Author</label>
-                <input type="text" name="music-author" class="form-control" maxlength="40">
-                <span class="material-input"></span>
-            </div>
-            <div class="form-group label-floating is-empty">
-                <label class="control-label">Url</label>
-                <input type="text" name="music-src" class="form-control" maxlength="240">
-                <span class="material-input"></span>
-            </div>
-            <div class="form-group label-floating is-empty">
-                <label class="control-label">Cover Url</label>
-                <input type="text" name="music-cover" class="form-control" maxlength="240">
-                <span class="material-input"></span>
-            </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Close</button>
-        <button type="button" id="music-play-btn" class="btn btn-info btn-simple">Play</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Alert Modal Core -->
 <div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
@@ -139,22 +70,10 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('/js/skPlayer.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/swfobject.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/web_socket.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
     $(function () {
-        var music_type = 'cloud';
-        // var player = new skPlayer({
-        //     autoplay: true,
-        //     listshow: false, // 设置为true时播放列表位置异常
-        //     mode: 'listloop',
-        //     music: {
-        //         type: 'cloud',
-        //         source: 317921676
-        //     }
-        // });
-
         // connection_lost(true);   // 测试
         // new_message(1);       // 测试
         // system_notify('@mingcw has logged in.'); // 测试
@@ -337,140 +256,6 @@
         })();
 
         /** Websocket js end */
-
-        /** 音乐js start */
-
-        // 设置音乐
-        $('#music-settings-btn').on('click', function(e) {
-            e.preventDefault();
-            $('#music-settings-modal').modal('toggle');
-        });
-
-        // 设置音乐类型
-        $('input[name="music-type"]').change(function(e) {
-            e.preventDefault();
-
-            var type = $(this).val().trim(),
-                $cloud_group = $('.music-cloud-group'),
-                $customize_group = $('.music-customize-group');
-
-            if (type == 'cloud') {
-                $cloud_group.removeClass('hidden');
-                $customize_group.removeClass('hidden').addClass('hidden');
-                music_type = type;
-            } else if(type == 'file') {
-                $customize_group.removeClass('hidden');
-                $cloud_group.removeClass('hidden').addClass('hidden');
-                music_type = type;
-            }
-        });
-
-        // 播放
-        $('#music-play-btn').on('click', function(e) {
-            e.preventDefault();
-
-            if (music_type == 'cloud') {
-                var playist_id = parseInt($('input[name="netease-cloud-music-playist-id"]').val().trim());
-                
-                if (playist_id) {
-                    if (player) { // 全局的
-                        player.destroy();
-                    }
-                    player = new skPlayer({
-                        autoplay: true,
-                        listshow: false, // 设置为true时播放列表位置异常
-                        mode: 'listloop',
-                        music: {
-                            type: 'cloud',
-                            source: playist_id
-                        }
-                    });
-                } else {
-                    alert_modal('Error Id: ' + playist_id);
-                }
-            } else if(music_type == 'file') {
-                var name = $('input[name="music-name"]').val().trim() || 'Undefined',
-                    author = $('input[name="music-author"]').val().trim() || 'Undefined',
-                    src = $('input[name="music-src"]').val().trim() || '',
-                    cover = $('input[name="music-cover"]').val().trim() || '';
-
-                if (src.match(/((http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig)) {
-                    if (player) { // 全局的
-                        player.destroy();
-                    }
-                    player = new skPlayer({
-                        autoplay: true,
-                        listshow: false, // 设置true时播放列表位置异常
-                        mode: 'listloop',
-                        music: {
-                            type: 'file',
-                            source: [
-                                {
-                                    name: name,
-                                    author: author,
-                                    src: src,
-                                    cover: cover
-                                }
-                            ]
-                        }
-                    });
-                } else {
-                    alert_modal('Url is ' + (src?'invalid':'empty') );
-                }
-            } else{
-                 alert_modal('Unknown music type: ' + music_type);
-            }
-        });
-
-        // 播放列表显隐切换
-        $(document).on('click', '#skPlayer .skPlayer-list-switch', function(e) {
-            e.stopPropagation(); // 阻止事件传播（在捕获阶段）
-
-            var $sk_player = $('#skPlayer'),
-                $list = $sk_player.find('.skPlayer-list'),
-                list_h = $list.height();
-
-            if (!$list.is(':hidden')) {
-                $list.animate({top: (-list_h) + 'px'}, 'fast');
-            } else {
-                $list.animate({top: (   0   ) + 'px'}, 'fast');
-            }
-        });
-        
-        // 点击其他区域时，隐藏播放列表、播放器
-        $(document).on('click', function(e) {
-            var $music_player = $('#music-player'),
-                $sk_player = $('#skPlayer'),
-                $list = $sk_player.find('.skPlayer-list'),
-                sk_w = $sk_player.width();
-
-            if (!$list.is(e.target)) {
-                $sk_player.removeClass('skPlayer-list-on'); // 隐藏播放列表
-            }
-
-            if (!$music_player.is(e.target) && $music_player.has(e.target).length === 0 ) {
-                $music_player.animate({left: (-sk_w) + 'px'}, 'fast'); // 隐藏播放器
-                window.player_status = 'close';
-            }
-        });
-
-        // 播放器收起/展开
-        $('#player-switch-btn').click(function(e) {
-            e.stopPropagation(); // 阻止事件传播（在捕获阶段）
-
-            var $music_player = $('#music-player'), 
-                $sk_player = $('#skPlayer'), 
-                sk_w = $sk_player.width();
-
-            if (window.player_status === 'open') {
-                $music_player.animate({left: (-sk_w) + 'px'}, 'fast');
-                window.player_status = 'close';
-            } else {
-                $music_player.animate({left: 0}, 'fast');
-                window.player_status = 'open';
-            }
-        });
-        /** 音乐js end */
     });
 
     // alert 框

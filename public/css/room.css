@@ -250,30 +250,6 @@ ul.menu{
 #music-settings-modal .music-type-group {
     margin-top: 0;
 }
-#music-player{
-    position: fixed;
-    left: -380px;
-    bottom: 0;
-}
-#music-player #skPlayer .skPlayer-list{
-    padding-top: 2px;
-}
-#music-player .switch-btn{
-    position: absolute;
-    right: -24px;
-    top: 0;
-    width: 24px;
-    height: 100px;
-    line-height: 100px;
-    padding-top: 10px;
-    background: #000;
-    color: #fff;
-    opacity: .8;
-    filter: alpha(opacity=80);
-}
-#music-player .switch-btn i{
-    margin-top: 20px;
-}
 @media screen and (max-width: 992px) {
     .post-wrap .message-group{
         padding: 0 18px;
