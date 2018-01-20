@@ -144,8 +144,6 @@
     <script src="{{ asset('js/web_socket.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
     $(function () {
-        var bubbles = ['gray', 'purple', 'blue', 'green', 'yellow', 'red'];
-        var bubble = bubbles[parseInt((Math.random() * 6))];
         var music_type = 'cloud';
         // var player = new skPlayer({
         //     autoplay: true,
@@ -273,7 +271,6 @@
                     case 'init':
                         $.post('{{ url("bind") }}', {
                             client_id: data.client_id,
-                            bubble: bubble,
                             _token: "{{ csrf_token() }}"
                         }, function(data) {}, 'json');
                         break;

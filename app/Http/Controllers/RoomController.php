@@ -35,12 +35,16 @@ class RoomController extends Controller
 
         $uname  = session('uname');
         $avatar = session('avatar');
+
+        $bubble = ['gray', 'purple', 'blue', 'green', 'yellow', 'red'][mt_rand(0, 5)];
+        session(['bubble' => $bubble]);         // 分配一个聊天气泡，记录下来
         session(['room_id' => $id]);            // 记录所在房间号
 
         return view('room.index', [
             'room'    => $room,
             'uname'   => $uname,
             'avatar'  => $avatar,
+            'bubble'  => $bubble,
             'room_id' => $id
         ]);
     }
@@ -53,11 +57,10 @@ class RoomController extends Controller
     public function bind(Request $request)
     {
         $client_id = $request->input('client_id');
-        $bubble    = $request->input('bubble');
-
         $uid       = session('uid');
         $uname     = session('uname');
         $avatar    = session('avatar');
+        $bubble    = session('bubble');
         $room_id   = session('room_id');
 
         // 绑定uid和client_id、加入房间
@@ -66,7 +69,6 @@ class RoomController extends Controller
 
         // 记录会话
         session(['client_id' => $client_id]); // Laravel 负责
-        session(['bubble' => $bubble]);       // Laravel 负责
         Gateway::setSession($client_id, [     // GatewayWorker 负责
             'uid'     => $uid,
             'uname'   => $uname,
