@@ -6,21 +6,22 @@
 
 ## 框架/库/插件
 
-* GatewayWorker
-* Laravel
-* Material-Icons
-* Font-Awesome
-* Material-Kit
-* Bootstrap
-* skPlayer
+* GatewayWorker: https://github.com/walkor/GatewayWorker
+* Laravel: https://laravel.com
+* Material-Icons: https://material.io/icons
+* Font-Awesome: http://fontawesome.io
+* Material-Kit: https://www.creative-tim.com/product/material-kit
+* Bootstrap: https://getbootstrap.com
+* skPlayer: https://github.com/wangpengfei15975/skPlayer
 
 ## 环境/工具
 
 * LAMP (Ubuntu17.10 + Apache2 + MySQL + PHP5.6)
 * Bash
-* Sublime Text 3
-* phpmyadmin
-* GitKraken
+* Sublime Text 3: https://www.sublimetext.com
+* phpmyadmin: https://www.phpmyadmin.net
+* GitKraken: https://www.gitkraken.com
+* Composer: https://getcomposer.org
 
 ## 特性
 
