@@ -2,7 +2,7 @@
 
 基于 Laravel 5.4 和 GatewayWorker 3.0 的响应式聊天室。
 
-运行**截图**在最后。
+运行[截图](#截图)在最后。
 
 ## 框架/库/插件
 
@@ -122,7 +122,7 @@ php start.php start -d
 乌龟 | user11111111
 老司机 | user11111111
 
-## 运行截图
+## 截图
 
 <p><img src="./screenshot/login.png" style="display: block; width: 800px;"></p>
 <p><img src="./screenshot/register.png" style="display: block; width: 800px;"></p>
