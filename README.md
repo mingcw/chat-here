@@ -58,11 +58,14 @@ mysql>exit;
 
 4、配置`.env`
 
+(a) 复制出`.env`文件
+
 ```
 cp .env.example .env
 ```
 
-(a) 以下字段
+(b) 配置`.env`的以下字段
+
 
 ```
 APP_NAME='Chat Here'
@@ -77,7 +80,7 @@ DB_USERNAME=your_name
 DB_PASSWORD=your_password
 ```
 
-(b) 生成`APP_KEY`
+(c) 生成`APP_KEY`
 
 
 ```
@@ -102,6 +105,8 @@ php srtisan db:seed
 chmod -R 0777 storage/
 ```
 
+（仅针对 Linux 用户）
+
 8、启动 GatewayWorker
 
 ```
@@ -109,13 +114,18 @@ cd gatewayworker/
 composer install
 php start.php start -d
 ```
-更多 GatewayWorker 启动停止命令，请参考[文档](http://doc2.workerman.net/326106)。
+
+停止 GatewayWorker：`php start.php stop`
+
+注意，Windows 环境（不支持`php start.php {start|stop|restart|reload|status|connections} [-d]`的命令格式）请双击 `gatewayworker`目录下的`start_for_win.bat`启动，`ctrl+c`停止。
+
+更多 GatewayWorker 相关，请参考[文档](http://doc2.workerman.net/326102)。
 
 9、浏览器访问 http://your_virtual_host
 
 ## 测试账号
 
-**请使用多个浏览器测试（或浏览器新开隐私模式）**
+请使用**多个**浏览器测试（或浏览器新开**隐私模式**）
 
 账号 | 密码
 --- | ---
