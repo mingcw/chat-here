@@ -112,7 +112,7 @@ class RoomController extends Controller
             case 'all': // 公聊
                 Gateway::sendToGroup($room_id, json_encode([
                     'type'      => 'all',
-                    'uid' => $uid,
+                    'uid'       => $uid,
                     'uname'     => $uname,
                     'avatar'    => $avatar,
                     'bubble'    => $bubble,
