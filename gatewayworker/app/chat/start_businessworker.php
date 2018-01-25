@@ -8,6 +8,8 @@ use \Workerman\Autoloader;
  * BusinessWorker进程负责运行业务逻辑, 实际的业务处理由eventHandler指定的类来处理，默认是Events.php
  */
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 $worker = new BusinessWorker();
 $worker->name = 'ChatBusinessWorker';
 $worker->count = 4;

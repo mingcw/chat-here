@@ -8,6 +8,8 @@ use \Workerman\Autoloader;
  * Gateway 进程负责处理客户端连接，监听客户端的Websocket连接
  */
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 $gateway = new Gateway("Websocket://0.0.0.0:7272");
 $gateway->name = 'ChatGateway';
 $gateway->count = 4;
