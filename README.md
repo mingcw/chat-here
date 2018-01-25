@@ -61,8 +61,9 @@ mysql>exit;
 ```
 cp .env.example .env
 ```
+> Windows 环境请手动复制
 
-(a) 以下字段
+(a) 修改以下字段
 
 ```
 APP_NAME='Chat Here'
@@ -96,7 +97,7 @@ php artisan migrate
 php srtisan db:seed
 ```
 
-7、目录权限
+7、目录权限（针对 Linux 环境）
 
 ```
 chmod -R 0777 storage/
@@ -109,13 +110,17 @@ cd gatewayworker/
 composer install
 php start.php start -d
 ```
+停止：`php start.php stop`
+
+注意：**Windows** 环境不支持`php start.php start -d`等命令，请直接双击`start_for_win.bat`文件来启动 GatewayWorker，停止按 `Ctrl + C`。
+
 更多 GatewayWorker 启动停止命令，请参考[文档](http://doc2.workerman.net/326106)。
 
 9、浏览器访问 http://your_virtual_host
 
 ## 测试账号
 
-**请使用多个浏览器测试（或浏览器新开隐私模式）**
+请使用**多个**浏览器测试（或浏览器新开**隐私模式**）
 
 账号 | 密码
 --- | ---
