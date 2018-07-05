@@ -1,7 +1,5 @@
 # chat-here
 
-> ！！已停止更新！！请前往 [mingcw/laravel-chat](https://github.com/mingcw/laravel-chat) 获取新版源码。
-
 基于 Laravel 5.4 和 GatewayWorker 3.0 的响应式聊天室。
 
 运行[截图](#截图)在最后。
